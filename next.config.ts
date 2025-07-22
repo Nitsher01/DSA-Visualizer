@@ -1,15 +1,25 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
+
+// Detect production environment for GitHub Pages
+const isProd = process.env.NODE_ENV === 'production';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Enables static HTML export
   output: 'export',
-  basePath: '/DSA-Visualizer',
+
+  // Base path and asset prefix must match GitHub Pages repo name
+  basePath: isProd ? '/DSA-Visualizer' : '',
+  assetPrefix: isProd ? '/DSA-Visualizer/' : '',
+
+  // These help prevent build failures during export
   typescript: {
     ignoreBuildErrors: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
+
+  // Allow external images if needed
   images: {
     remotePatterns: [
       {
