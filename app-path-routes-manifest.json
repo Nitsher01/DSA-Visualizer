@@ -1,0 +1,10 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/heap/page": "/heap",
+  "/array/page": "/array",
+  "/hashmap/page": "/hashmap",
+  "/page": "/",
+  "/queue/page": "/queue",
+  "/stack/page": "/stack"
+}
