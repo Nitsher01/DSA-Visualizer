@@ -1,13 +1,13 @@
 
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { Bar, BarChart, CartesianGrid, LabelList, Line, LineChart, Scatter, ScatterChart, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { useToast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
@@ -70,6 +70,7 @@ export default function ArrayPage() {
   const [inputValue, setInputValue] = useState("[10, 20, 15, 30, 25]");
   const [visualizationType, setVisualizationType] = useState<VisualizationType>("bar");
   const { toast } = useToast();
+  const visualizationRef = useRef<HTMLDivElement>(null);
 
   const parseArrayInput = (value: string) => {
     try {
@@ -106,12 +107,14 @@ export default function ArrayPage() {
 
   const handleParse = () => {
     parseArrayInput(inputValue);
+    visualizationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   
   const handleSampleClick = (key: keyof typeof sampleArrays) => {
       const value = sampleArrays[key];
       setInputValue(value);
       parseArrayInput(value);
+      visualizationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   const chartData = is2D ? [] : (arrayData as number[]).map((value, index) => ({
@@ -189,47 +192,37 @@ export default function ArrayPage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Visualization Controls</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="flex flex-col gap-2">
-                <Label>Select visualization type</Label>
-                <Select
-                  value={visualizationType}
-                  onValueChange={(value) => setVisualizationType(value as VisualizationType)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {is2D ? (
-                      <>
-                        <SelectItem value="grid">Grid</SelectItem>
-                        <SelectItem value="heatmap">Heatmap</SelectItem>
-                      </>
-                    ) : (
-                      <>
-                        <SelectItem value="bar">Bar Chart</SelectItem>
-                        <SelectItem value="line">Line Plot</SelectItem>
-                        <SelectItem value="dot">Dot Plot</SelectItem>
-                      </>
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Visualization</CardTitle>
-          <CardDescription>
-            {is2D ? `2D Array Visualization: ${visualizationType.charAt(0).toUpperCase() + visualizationType.slice(1)}` : `1D Array Visualization: ${visualizationType.charAt(0).toUpperCase() + visualizationType.slice(1)}`}
-          </CardDescription>
+      <Card ref={visualizationRef}>
+        <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Visualization</CardTitle>
+              <CardDescription>
+                {is2D ? `2D Array: ${visualizationType}` : `1D Array: ${visualizationType}`}
+              </CardDescription>
+            </div>
+            <RadioGroup 
+                value={visualizationType} 
+                onValueChange={(value) => setVisualizationType(value as VisualizationType)}
+                className="flex items-center gap-1 bg-muted p-1 rounded-md"
+            >
+                {is2D ? (
+                    <>
+                        <RadioGroupItem value="grid" id="grid" className="peer sr-only" />
+                        <Label htmlFor="grid" className="px-2.5 py-1.5 rounded-md cursor-pointer peer-data-[state=checked]:bg-background peer-data-[state=checked]:shadow-sm">Grid</Label>
+                        <RadioGroupItem value="heatmap" id="heatmap" className="peer sr-only" />
+                        <Label htmlFor="heatmap" className="px-2.5 py-1.5 rounded-md cursor-pointer peer-data-[state=checked]:bg-background peer-data-[state=checked]:shadow-sm">Heatmap</Label>
+                    </>
+                ) : (
+                    <>
+                        <RadioGroupItem value="bar" id="bar" className="peer sr-only" />
+                        <Label htmlFor="bar" className="px-2.5 py-1.5 rounded-md cursor-pointer peer-data-[state=checked]:bg-background peer-data-[state=checked]:shadow-sm">Bar</Label>
+                        <RadioGroupItem value="line" id="line" className="peer sr-only" />
+                        <Label htmlFor="line" className="px-2.5 py-1.5 rounded-md cursor-pointer peer-data-[state=checked]:bg-background peer-data-[state=checked]:shadow-sm">Line</Label>
+                        <RadioGroupItem value="dot" id="dot" className="peer sr-only" />
+                        <Label htmlFor="dot" className="px-2.5 py-1.5 rounded-md cursor-pointer peer-data-[state=checked]:bg-background peer-data-[state=checked]:shadow-sm">Dot</Label>
+                    </>
+                )}
+            </RadioGroup>
         </CardHeader>
         <CardContent className="overflow-x-auto p-4 min-h-[450px] flex items-center justify-center">
           {is2D ? (
