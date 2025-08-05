@@ -121,17 +121,34 @@ export default function HomePage() {
 
         <section className="text-center mt-20">
           <h3 className="text-3xl font-bold mb-4">Algorithm Visualizer</h3>
-          <Card className="max-w-md mx-auto">
-            <CardContent className="pt-6">
-              <div className="flex flex-col items-center text-center">
-                <span className="text-5xl mb-4">🚀</span>
-                <h4 className="text-xl font-semibold mb-2">Coming Soon</h4>
-                <p className="text-muted-foreground">
-                  Sorting algorithms, searching algorithms, graph algorithms, and more will be available in future updates.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+            <Link href="/algorithms" className="group">
+              <Card className="h-full transition-all duration-300 ease-in-out group-hover:shadow-lg group-hover:-translate-y-1">
+                <CardHeader className="text-center items-center">
+                  <span className="text-5xl mb-4">⚙️</span>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <CardTitle className="mb-2">Standard Algorithms</CardTitle>
+                  <CardDescription>
+                    Visualize classic sorting and searching algorithms like Bubble Sort, Merge Sort, and Binary Search.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </Link>
+            <div className="group cursor-not-allowed">
+              <Card className="h-full bg-muted/50">
+                <CardHeader className="text-center items-center">
+                  <span className="text-5xl mb-4">✨</span>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <CardTitle className="mb-2">Custom Algorithms</CardTitle>
+                  <CardDescription>
+                    (Coming Soon) Write your own Python or JavaScript code and see it animated.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </section>
       </main>
 
